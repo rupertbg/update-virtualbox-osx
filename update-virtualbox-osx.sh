@@ -27,24 +27,27 @@ EXTPACK=`curl -s $LOCATION/$ONLINEVERSION/ | grep -i '\.vbox-extpack\>' | grep -
 EXTPACKDOWNLOAD="$LOCATION/$ONLINEVERSION/$EXTPACK"
 
 ## Version comparison function ##
-if [[ $LOCALVERSION == $ONLINEVERSION ]]; then
+LOCALMAJOR=`echo $LOCALVERSION | cut -d. -f1`
+ONLINEMAJOR=`echo $ONLINEVERSION | cut -d. -f1`
+LOCALMINOR=`echo $LOCALVERSION | cut -d. -f2`
+ONLINEMINOR=`echo $ONLINEVERSION | cut -d. -f2`
+LOCALPATCH=`echo $LOCALVERSION | cut -d. -f3`
+ONLINEPATCH=`echo $ONLINEVERSION | cut -d. -f3`
+##if [ ${#LOCAL} -lt 4 ] || [ ${#ONLINE} -lt 4 ]; then
+##  l=$((4 - ${#LOCAL}))
+##  o=$((4 - ${#ONLINE}))
+##  for (( i = 0; i < $l; i++ )); do
+##    LOCAL="${LOCAL}0"
+##  done
+##  for (( i = 0; i < $o; i++ )); do
+##    ONLINE="${ONLINE}0"
+##  done
+##fi
+if [[ "$LOCALVERSION" == "$ONLINEVERSION" ]]; then
   VERSIONRESULT=0
-fi
-LOCAL=${LOCALVERSION//.}
-ONLINE=${ONLINEVERSION//.}
-if [ ${#LOCAL} -lt 4 ] || [ ${#ONLINE} -lt 4 ]; then
-  l=$((4 - ${#LOCAL}))
-  o=$((4 - ${#ONLINE}))
-  for (( i = 0; i < $l; i++ )); do
-    LOCAL="${LOCAL}0"
-  done
-  for (( i = 0; i < $o; i++ )); do
-    ONLINE="${ONLINE}0"
-  done
-fi
-if [[ ${LOCAL} -gt ${ONLINE} ]]; then
+elif [ ${LOCALMAJOR} -lt ${ONLINEMAJOR} ] && [ ${LOCALMINOR} -lt ${ONLINEMINOR} ] && [ ${LOCALPATCH} -lt ${ONLINEPATCH} ]; then
   VERSIONRESULT=1
-elif [[ ${LOCAL} -lt ${ONLINE} ]]; then
+else
   VERSIONRESULT=2
 fi
 
