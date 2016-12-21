@@ -23,7 +23,7 @@ DMGDOWNLOAD="$LOCATION/$ONLINEVERSION/$DMG"
 
 ## Extension pack ##
 VBMANAGE="/usr/local/bin/VBoxManage"
-EXTPACK=`curl -s $LOCATION/$ONLINEVERSION/ | grep -i '\.vbox-extpack\>' | grep -Eo '".*"' | tr -d '"'`
+EXTPACK=`curl -s $LOCATION/$ONLINEVERSION/ | grep -i '\.vbox-extpack\>' | grep -Eo -m 1 '".*"' | tr -d '"'`
 EXTPACKDOWNLOAD="$LOCATION/$ONLINEVERSION/$EXTPACK"
 
 ## Version comparison function ##
